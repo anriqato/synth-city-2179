@@ -60,6 +60,9 @@ function init() {
   raycaster = new THREE.Raycaster();
   mouse = new THREE.Vector2();
   
+  // Setup lighting
+  setupLighting();
+  
   // Add event listeners
   window.addEventListener('resize', onWindowResize);
   window.addEventListener('mousemove', onMouseMove);
@@ -68,6 +71,31 @@ function init() {
   scene.add(city);
   city.add(smoke);
   city.add(town);
+}
+
+// Setup lighting for the scene
+function setupLighting() {
+  // Ambient light
+  const ambientLight = new THREE.AmbientLight(0xb2ebf2, 1);
+  scene.add(ambientLight);
+  
+  // Main front light
+  const lightFront = new THREE.SpotLight(0xb2ebf2, 2.5, 50, Math.PI / 4, 0.5, 1);
+  lightFront.position.set(5, 15, 5);
+  lightFront.castShadow = true;
+  lightFront.shadow.mapSize.width = 2048;
+  lightFront.shadow.mapSize.height = 2048;
+  city.add(lightFront);
+  
+  // Back light
+  const lightBack = new THREE.PointLight(0x7B68EE, 1, 50);
+  lightBack.position.set(-10, 15, -5);
+  city.add(lightBack);
+  
+  // Ground light
+  const groundLight = new THREE.PointLight(0x00FFFF, 0.8, 30);
+  groundLight.position.set(0, 0.2, 0);
+  city.add(groundLight);
 }
 
 // Handle window resize
